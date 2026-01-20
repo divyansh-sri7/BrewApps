@@ -25,18 +25,29 @@ A modern iOS weather application built with SwiftUI, featuring real-time weather
 ### MVVM Pattern
 ```
 GlassCast/
-├── App/
-│   ├── GlassCastApp.swift          # App entry point
-│   └── MainAppView.swift            # Main navigation view
-├── Core/
+├── App/                                    # Application entry point
+│   ├── GlassCastApp.swift                 # Main app struct
+│   └── MainAppView.swift                   # Main navigation view
+│
+├── Core/                                   # Core infrastructure
 │   ├── Authentication/
-│   │   ├── AuthManager.swift        # Authentication logic
-│   │   └── SupabaseClient.swift     # Supabase API client
-│   ├── Config/
-│   │   └── AppConfig.swift          # Configuration management
-│   └── Network/
-│       └── WeatherService.swift     # Weather API service
-├── Features/
+│   │   ├── AuthManager.swift              # Authentication state management
+│   │   └── SupabaseClient.swift           # Supabase REST API client
+│   ├── Configuration/
+│   │   └── AppConfig.swift                # Environment variables & config
+│   ├── Extensions/                        # Swift extensions
+│   ├── Models/                            # Shared models
+│   ├── Networking/
+│   │   └── WeatherService.swift           # OpenWeatherMap API service
+│   └── Utilities/                         # Utility classes
+│
+├── Features/                               # Feature modules (MVVM)
+│   ├── Authentication/
+│   │   ├── Models/
+│   │   ├── ViewModels/
+│   │   └── Views/
+│   │       ├── SignInView.swift
+│   │       └── SignUpView.swift
 │   ├── CitySearch/
 │   │   ├── Models/
 │   │   │   ├── CitySearchResult.swift
@@ -45,14 +56,35 @@ GlassCast/
 │   │   │   └── CitySearchViewModel.swift
 │   │   └── Views/
 │   │       └── CitySearchView.swift
-│   └── Home/
+│   ├── Settings/
+│   │   ├── Models/
+│   │   ├── ViewModels/
+│   │   └── Views/
+│   │       └── SettingsView.swift
+│   └── Weather/
 │       ├── Models/
+│       │   └── WeatherData.swift
 │       ├── ViewModels/
 │       │   └── HomeViewModel.swift
 │       └── Views/
 │           └── HomeView.swift
+│
+├── Views/                                  # Legacy/shared views
+│   ├── Auth/
+│   ├── CitySearch/
+│   ├── Components/                        # Reusable UI components
+│   ├── Home/
+│   └── Settings/
+│
+├── ViewModels/                             # Legacy ViewModels (being migrated)
+├── Models/                                 # Legacy Models (being migrated)
+├── Services/                               # Legacy Services (being migrated)
+├── Extensions/                             # Global extensions
+├── Utils/                                  # Utility functions
+│
 └── Resources/
-    └── Assets.xcassets
+    ├── Assets.xcassets                    # Images, colors, icons
+    └── Fonts/                             # Custom fonts
 ```
 
 ## Setup Instructions
