@@ -112,32 +112,39 @@ Run this SQL in your Supabase SQL Editor:
 
 ```sql
 -- Create favorite_cities table
-CREATE TABLE favorite_cities (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+CREATE TABLE public.favorite_cities (
+    id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL,
     city_name TEXT NOT NULL,
-    country TEXT,
-    latitude DOUBLE PRECISION NOT NULL,
-    longitude DOUBLE PRECISION NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+    lat DOUBLE PRECISION NOT NULL,
+    lon DOUBLE PRECISION NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NULL DEFAULT now(),
+    CONSTRAINT favorite_cities_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES auth.users (id) ON DELETE CASCADE
+) TABLESPACE pg_default;
 
 -- Enable Row Level Security
-ALTER TABLE favorite_cities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.favorite_cities ENABLE ROW LEVEL SECURITY;
 
--- Users can only see their own favorites
-CREATE POLICY "Users can view own favorites"
-    ON favorite_cities FOR SELECT
+-- Policy: Users can read their own cities
+CREATE POLICY "Users can read their own cities"
+    ON public.favorite_cities
+    FOR SELECT
+    TO authenticated
     USING (auth.uid() = user_id);
 
--- Users can insert their own favorites
-CREATE POLICY "Users can insert own favorites"
-    ON favorite_cities FOR INSERT
+-- Policy: Users can add their own cities
+CREATE POLICY "Users can add their own cities"
+    ON public.favorite_cities
+    FOR INSERT
+    TO authenticated
     WITH CHECK (auth.uid() = user_id);
 
--- Users can delete their own favorites
-CREATE POLICY "Users can delete own favorites"
-    ON favorite_cities FOR DELETE
+-- Policy: Users can delete their own cities
+CREATE POLICY "Users can delete their own cities"
+    ON public.favorite_cities
+    FOR DELETE
+    TO authenticated
     USING (auth.uid() = user_id);
 ```
 
